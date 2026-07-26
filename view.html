@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<article class="note-view">
+    <div class="note-view-header">
+        <h1>{{ note.title }}</h1>
+        <div class="note-actions">
+            <a href="{{ url_for('edit_note', note_id=note.id) }}">Edit</a>
+            <form method="post" action="{{ url_for('delete_note', note_id=note.id) }}"
+                  onsubmit="return confirm('Delete this note?');">
+                <button type="submit" class="link-button">Delete</button>
+            </form>
+        </div>
+    </div>
+    <p class="note-view-meta">Last updated <span data-timestamp="{{ note.updated_at }}">{{ note.updated_at }}</span></p>
+
+    {% if summary %}
+    <div class="ai-panel">
+        <span class="source-badge source-ai">AI SUMMARY</span>
+        <p>{{ summary }}</p>
+    </div>
+    {% endif %}
+
+    <div class="note-body">
+        {{ html_body | safe }}
+    </div>
+
+    {% if suggested_tags %}
+    <div class="ai-block">
+        <span class="ai-label">Suggested tags</span>
+        <div class="tag-suggestions">
+            {% for tag in suggested_tags %}
+            <form method="post" action="{{ url_for('add_tag', note_id=note.id) }}" class="inline-form">
+                <input type="hidden" name="tag" value="{{ tag }}">
+                <button type="submit" class="tag-suggestion">+ {{ tag }}</button>
+            </form>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if related_notes %}
+    <div class="ai-block">
+        <span class="ai-label">Related notes</span>
+        <ul class="related-list">
+            {% for related, score in related_notes %}
+            <li>
+                <a href="{{ url_for('view_note', note_id=related.id) }}">{{ related.title }}</a>
+                <span class="similarity">{{ (score * 100) | round | int }}% similar</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</article>
+<a class="back-link" href="{{ url_for('index') }}">← all notes</a>
+{% endblock %}

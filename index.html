@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<form class="search-form" method="get">
+    <input type="text" name="q" placeholder="Search by title, tag, or topic…" value="{{ query }}">
+    <label class="smart-toggle">
+        <input type="checkbox" name="smart" value="1" {{ "checked" if smart }} onchange="this.form.submit()">
+        Smart search
+    </label>
+</form>
+
+{% if notes %}
+<ul class="note-list">
+    {% for note in notes %}
+    <li class="note-card">
+        <a class="note-title" href="{{ url_for('view_note', note_id=note.id) }}">{{ note.title }}</a>
+        <div class="note-meta">
+            <span data-timestamp="{{ note.updated_at }}">{{ note.updated_at }}</span>
+            {% if note.tags %}
+            <span class="tags">
+                {% for tag in note.tags.split(',') %}<span class="tag">{{ tag.strip() }}</span>{% endfor %}
+            </span>
+            {% endif %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<div class="empty-state">
+    <p>{% if query %}No notes match "{{ query }}".{% else %}No notes yet — start with "+ New".{% endif %}</p>
+</div>
+{% endif %}
+{% endblock %}

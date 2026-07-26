@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ "Edit note" if note else "New note" }}</h1>
+<form method="post" class="editor-form">
+    <input type="text" name="title" placeholder="Title" value="{{ note.title if note else '' }}" required autofocus>
+    <input type="text" name="tags" placeholder="tags, comma, separated" value="{{ note.tags if note else '' }}">
+    <textarea name="body" rows="14" placeholder="Write in Markdown…">{{ note.body if note else '' }}</textarea>
+    <div class="editor-actions">
+        <button type="submit">Save</button>
+        <a href="{{ url_for('index') }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}

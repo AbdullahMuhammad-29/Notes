@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}NoteNest{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="ambient" aria-hidden="true">
+        <span class="blob blob-1"></span>
+        <span class="blob blob-2"></span>
+        <span class="blob blob-3"></span>
+    </div>
+    <div class="shell">
+        {% if session.user_id %}
+        <nav class="topbar">
+            <a class="logo" href="{{ url_for('index') }}">NoteNest</a>
+            <div class="nav-actions">
+                <span class="current-user">{{ session.username }}</span>
+                <a class="btn-new" href="{{ url_for('new_note') }}">+ New</a>
+                <a href="{{ url_for('logout') }}">Log out</a>
+            </div>
+        </nav>
+        {% endif %}
+        <main class="content">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='format-dates.js') }}"></script>
+</body>
+</html>
